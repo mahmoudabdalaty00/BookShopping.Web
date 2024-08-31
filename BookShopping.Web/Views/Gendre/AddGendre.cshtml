@@ -1,0 +1,24 @@
+﻿@model GendreDtos
+@{
+    ViewData["Title"] = "AddGendre";
+}
+
+<h1>AddGendre</h1>
+
+<div style="width:50%">
+<h2> Add Genre </h2>
+<a asp-action="Index" asp-controller="Gendre" class="btn btn-primary">Back</a>
+<form asp-action="AddGendre">
+   <input type="hidden" asp-for="Id" />  
+
+   <div class="my-2">
+      <label>Genre</label>
+      <input type="text" class="form-control" asp-for="GendreName" />
+            <span asp-validation-for="GendreName" class="text-danger"></span>
+   </div>
+
+   <div class="my-2">
+      <button type="submit" class="btn btn-info">Add</button>
+   </div>
+</form>
+</div>

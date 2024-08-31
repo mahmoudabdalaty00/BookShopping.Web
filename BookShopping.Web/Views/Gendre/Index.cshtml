@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Gendre>
+@{
+    ViewData["Title"] = "Index";
+}
+
+ 
+
+<h2>Genres</h2>
+
+<a asp-action="AddGendre" asp-controller="Gendre" class="btn btn-primary">Add More</a>
+
+<table class="table table-striped my-2">
+    <tr>
+        <th>Genre</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var genre in Model)
+    {
+        <tr>
+            <td>@genre.GendreName</td>
+            <td>
+                <a asp-action="EditGendre" asp-controller="Gendre" asp-route-id="@genre.Id" class="btn btn-success">Edit</a>
+                <a asp-action="DeleteGendre" asp-controller="Gendre" asp-route-id="@genre.Id" class="btn btn-danger" onclick="return window.confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
