@@ -33,7 +33,7 @@ namespace BookShopping.Web.Models
         public string GenreName { get; set; }
         [NotMapped]
 
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
 
     }

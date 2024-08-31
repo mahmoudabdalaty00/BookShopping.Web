@@ -30,7 +30,7 @@ namespace BookShopping.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddGendre(GendreDtos gendre)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return View(gendre);
             }
