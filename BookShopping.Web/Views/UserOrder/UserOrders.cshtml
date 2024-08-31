@@ -1,0 +1,155 @@
+﻿@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "UserOrders";
+}
+
+<h1>UserOrders</h1>
+<a href="/Identity/Account/Manage" class="btn btn-primary">Back</a>
+<div style="width:90%;margin:auto" class="mt-2">
+    @if (Model != null && Model.Count() > 0)
+    {
+      <table class="table table-striped" >
+
+          <tr>
+               <th>
+                    OrderDate
+               </th>
+                  <th>
+                    OrderStatus
+               </th>
+               
+    
+          </tr>
+            @foreach(var order in Model)
+            {
+               <tr>
+                   <td>
+                       @order.createdate.ToString("dd-MM-yyyy")
+                   </td>
+                   <td>
+                       @order.OrderStatus.StatusName
+					</td>
+				</tr>
+				@if(order.OrderDetails!=null&& order.OrderDetails.Count > 0)
+                    {
+                        <tr>
+                        <td>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Book</th>
+                                <th>Image</th>
+                                <th>Genre</th>
+                                <th>Unit Price(INR)</th>
+                                <th>Total Price</th>
+                                <th>Action</th>
+                            </tr>
+                            @foreach (var item in order.OrderDetails)
+                            {
+                                <tr>
+                                    <td>@item.Book.Title</td>
+                                    <td>
+                                            @if (string.IsNullOrEmpty(item.Book.Image))
+                                        {
+                                            <img src="/images/NoImage.png" style="width:80px;height:100px" />
+                                        }
+                                        else
+                                        {
+                                                <img src="/images/@item.Book.Image" style="width:80px;height:100px" />
+                                        }
+                                    </td>
+                                        <td>@item.Book.Gendre.GendreName</td>
+                                        <td>@item.Book.Price X @item.Quantity</td>
+                                        <td>@(item.Book.Price * item.Quantity)</td>
+                                    <td>
+                                        @* Increase Quantity button should be invisible if not enough stock
+                                            @if (item.Quantity < item.Book.Stock.Quantity)
+                                        {
+                                            <a class="btn btn-info" href="/Cart/AddItem?bookId=@item.Book_Id&&redirect=1">+</a>
+                                        }
+                                        else
+                                        {
+                                            <span style="border: 1px solid;padding: 8px 8px;color: red;border-radius: 5px;margin-right:4px">Out of stock </span>
+                                        }*@
+                                        @* Decrement button *@
+                                        <a class="btn btn-info" href="/cart/removeitem?bookid=@item.Book_Id">-</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                        </td>
+                        </tr>
+                       
+                    }
+             
+            }
+
+      </table>
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+    else
+    {
+        <h5>Cart is empty</h5>
+    }
+</div>
+
+@* <table class="table table-striped">
+            <tr>
+                <th>Book</th>
+                <th>Image</th>
+                <th>Genre</th>
+                <th>Unit Price(INR)</th>
+                <th>Total Price</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var item in Model.CartDetails)
+            {
+                <tr>
+                    <td>@item.Books.Title</td>
+                    <td>
+                        @if (string.IsNullOrEmpty(item.Books.Image))
+                        {
+                            <img src="/images/NoImage.png" style="width:80px;height:100px" />
+                        }
+                        else
+                        {
+                            <img src="/images/@item.Books.Image" style="width:80px;height:100px" />
+                        }
+                    </td>
+                    <td>@item.Books.Gendre.GendreName</td>
+                    <td>@item.Books.Price X @item.Quantity</td>
+                    <td>@(item.Books.Price * item.Quantity)</td>
+                    <td>
+                        @* Increase Quantity button should be invisible if not enough stock*@
+@*       @if (item.Quantity < item.Books.Stock.Quantity)
+                        {
+                            <a class="btn btn-info" href="/Cart/AddItem?bookId=@item.Book_Id&&redirect=1">+</a>
+                        }
+                        else
+                        {
+                            <span style="border: 1px solid;padding: 8px 8px;color: red;border-radius: 5px;margin-right:4px">Out of stock </span>
+                        }
+                       Decrement button
+                        <a class="btn btn-info" href="/cart/removeitem?bookid=@item.Book_Id">-</a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <div class="my-2">
+            <h5>Total(INR): </h5>
+            @(Model.CartDetails.Select(item => item.Books.Price * item.Quantity).Sum())
+        </div>
+
+        *@

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "AllOrders";
+}
+
+<h1>AllOrders</h1>
+
+<div style="width:100%" class="mt-2">
+    @if(Model != null && Model.Count() > 0)
+    {
+        <table class="table table-active" >
+<tr>
+    <th>OrderDae</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Address</th>
+    <th>PaymentMehod</th>
+    <th>OrderStatus</th>
+    <th>Action</th>
+
+</tr>
+
+            @foreach(var O in Model)
+            {
+                <tr>
+                    <td>@O.createdate</td>
+                    <td>@O.Name</td>
+                    <td>@O.Email</td>
+                    <td>@O.MobileNumber</td>
+                    <td>@O.Address</td>
+                    <td>@O.PaymentMethod</td>
+                    <td>@O.OrderStatus.StatusName</td>
+                    <td>@O.IsPaid</td>
+                    <td>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-@O.Id" class="btn btn-primary">
+                            Order-Detail
+                        </button>
+                        <a asp-action="UpdateOrderStatus" asp-route-orderId="@O.Id" class="btn btn-info">Change Order Status</a>
+                        <a asp-action="TogglePaymentStatus" asp-route-orderId="@O.Id" class="btn btn-info">Toggle Payment Status</a>
+
+                        @* appending modal div here *@
+                        @* Make sure to put this partial tag inside this td block, otherwise it can cause layout related problem
+                        @await Html.PartialAsync("/Views/AdminOperations/_OrderDetailModal.cshtml", new OrderDetailsDtoscs { DivId = O.Id.ToString(), Details = O.OrderDetails })*@
+                    </td>
+                </tr>
+
+
+
+            }
+        </table>
+    }
+    else
+    {
+        <h3>No Orders</h3>
+
+    }
+</div>

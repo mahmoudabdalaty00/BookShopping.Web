@@ -1,0 +1,139 @@
+﻿@model BookDisplayModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="mt-4">
+    
+    <form  asp-action="Index"   class="row row-cols-lg-auto g-3 align-items-center">
+
+
+
+
+  <div class="col-12">
+
+            <label class="visually-hidden" for="gendreId">
+        Genres
+        </label>
+         
+            <select class="form-select" id="gendreId" name="gendreId">
+                <option   selected > Gendres</option>
+                @foreach(var gen in Model.gendres)
+                {
+                    <option selected="@(gen.Id == Model.GendreID)" value="@gen.Id">@gen.GendreName</option>
+                }
+               
+      
+    </select>
+  </div>
+
+
+        <div class="col-12">
+            <label class="visually-hidden" for="sterm">
+                Search by title
+            </label>
+            <div class="input-group">
+@*                 <div class="input-group-text"></div>
+ *@                <input type="text" class="form-control"
+                     id="sterm" 
+                     placeholder="Search by title" 
+                     name="sterm"
+                    value="@Model.Sterm"
+ >
+            </div>
+        </div>
+
+
+@* 
+
+  <div class="col-12">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+      <label class="form-check-label" for="inlineFormCheck">
+        Remember me
+      </label>
+    </div>
+  </div>
+
+ *@
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary"> Search </button>
+    <a href="/Home/Index" type="reset" class="btn btn-primary"> reset </a>
+  </div>
+</form>
+
+
+  </div>
+
+
+
+
+
+
+  <div class="w-100 d-flex flex-wrap mt-5 ">
+
+     @foreach( var book in Model.Books)
+    {
+        <div class="card mx-2 mb-4 " style="width: 18rem;">
+            @if (string.IsNullOrWhiteSpace(book.Image))
+            {
+                <img   src="/Images//th (1).jpeg" class="card-img-top" alt="...">
+
+            }
+            else
+            {
+                <img style="width:100px ; height :150px" src="/Images/@book.Image" class="card-img-top w-100 h-100" alt="...">
+            }
+            <div class="card-body">
+                <h5 class="card-title">@book.Title</h5>
+				<p class="card-text">	Auther : @book.Author </p  >	
+                <p class="card-text"> Genre :@book.GenreName </p>
+				<p class="card-text"> Price :  @book.Price</p>	
+                <p class="card-text"> Quantity :  @book.Quantity</p>
+
+              @if(book.Quantity > 0){ 
+                      <button
+                        type="button" onclick="add(@book.Id)"
+                    class="btn btn-primary">Add to cart
+                    </button>
+                }
+
+                else
+                {
+                   <Span  style=" border : 1px solid ; padding 5px 8 px ; color :red
+                         ;border-radius : 5px ; ">
+                     Out Of Stocks
+                     </Span>       
+                }
+			</div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        async function add(bookId) {
+
+            var usernameEl = document.getElementById("username");
+            if (usernameEl == null) {
+                window.location.href = "/Identity/Account/Login";
+              
+            }
+
+                try {
+                    var response = await fetch(`/Cart/AddItem?bookId=${bookId}`);
+                    if (response.status == 200) {
+                        var result = await response.json();
+                    var cartCountEl = document.getElementById("cartCount");
+                        cartCountEl.innerHTML = result;
+                    window.location.href = "#cartCount";
+                     }
+                }
+            catch (err) {
+                console.log(err);
+            }
+        }
+    </script>
+} 
